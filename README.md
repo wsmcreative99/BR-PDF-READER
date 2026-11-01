@@ -50,3 +50,6 @@ Output artifact: `BR-PDF-READER-macOS-universal` → `BR_PDF_READER_FFGL.bundle`
 3. Restart Resolume. **BR PDF Reader** appears under Sources.
 
 Requires macOS 11+ and Resolume 7.11+ for Apple Silicon (universal bundle).
+
+## Download
+Link: https://github.com/wsmcreative99/BR-PDF-READER/releases/download/macOS/BR-PDF-READER-mac-port.zip
