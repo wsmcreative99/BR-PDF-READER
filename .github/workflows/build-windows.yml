@@ -1,0 +1,56 @@
+name: Build BR PDF READER
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout BR PDF READER
+        uses: actions/checkout@v4
+
+      - name: Fetch current Resolume FFGL SDK
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force external | Out-Null
+          if (Test-Path external/ffgl) { Remove-Item -Recurse -Force external/ffgl }
+          git clone --depth 1 https://github.com/resolume/ffgl.git external/ffgl
+          if (-not (Test-Path external/ffgl/CMakeLists.txt)) {
+            throw "FFGL SDK CMakeLists.txt not found."
+          }
+
+      - name: Install GLEW
+        shell: powershell
+        run: vcpkg install glew:x64-windows-static
+
+      - name: Configure
+        shell: powershell
+        run: |
+          cmake -S . -B build -A x64 `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" `
+            -DVCPKG_TARGET_TRIPLET=x64-windows-static
+
+      - name: Build Release
+        shell: powershell
+        run: cmake --build build --config Release --target BR_PDF_READER
+
+      - name: Package DLL
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force dist | Out-Null
+          $dll = Get-ChildItem -Path build -Recurse -Filter BR_PDF_READER_FFGL.dll | Select-Object -First 1
+          if (-not $dll) { throw "BR_PDF_READER_FFGL.dll was not produced." }
+          Copy-Item $dll.FullName dist/BR_PDF_READER_FFGL.dll
+          Compress-Archive -Path dist/BR_PDF_READER_FFGL.dll -DestinationPath dist/BR-PDF-READER-Windows-x64.zip -Force
+
+      - name: Upload plugin artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BR-PDF-READER-Windows-x64
+          path: dist/BR-PDF-READER-Windows-x64.zip
+          if-no-files-found: error

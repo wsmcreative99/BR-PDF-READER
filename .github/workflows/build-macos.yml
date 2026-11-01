@@ -1,0 +1,49 @@
+name: Build BR PDF READER (macOS)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout BR PDF READER
+        uses: actions/checkout@v4
+
+      - name: Fetch current Resolume FFGL SDK
+        run: |
+          mkdir -p external
+          rm -rf external/ffgl
+          git clone --depth 1 https://github.com/resolume/ffgl.git external/ffgl
+          test -f external/ffgl/CMakeLists.txt
+
+      - name: Configure (universal arm64 + x86_64)
+        run: |
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
+
+      - name: Build Release
+        run: cmake --build build --config Release --target BR_PDF_READER
+
+      - name: Package bundle
+        run: |
+          mkdir -p dist
+          BUNDLE=$(find build -type d -name "BR_PDF_READER_FFGL.bundle" | head -n 1)
+          if [ -z "$BUNDLE" ]; then echo "BR_PDF_READER_FFGL.bundle was not produced."; exit 1; fi
+          cp -R "$BUNDLE" dist/BR_PDF_READER_FFGL.bundle
+          # Ad-hoc signature so Apple Silicon will load it (not notarised).
+          codesign --force --deep --sign - dist/BR_PDF_READER_FFGL.bundle
+          lipo -info dist/BR_PDF_READER_FFGL.bundle/Contents/MacOS/BR_PDF_READER_FFGL
+          ditto -c -k --keepParent dist/BR_PDF_READER_FFGL.bundle dist/BR-PDF-READER-macOS-universal.zip
+
+      - name: Upload plugin artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BR-PDF-READER-macOS-universal
+          path: dist/BR-PDF-READER-macOS-universal.zip
+          if-no-files-found: error
