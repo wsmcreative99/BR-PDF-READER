@@ -41,6 +41,9 @@ for **Choose PDF**. All features and parameters are the same as on Windows.
 Run the **Build BR PDF READER (macOS)** GitHub Action (Actions tab → Run workflow).
 Output artifact: `BR-PDF-READER-macOS-universal` → `BR_PDF_READER_FFGL.bundle`.
 
+## Download
+Download: [Plugin Resolume PDF Reader macOS v1.0](https://github.com/wsmcreative99/BR-PDF-READER/releases/download/macOS/BR-PDF-READER-mac-port.zip)
+
 ## Install
 1. Unzip, then copy `BR_PDF_READER_FFGL.bundle` to
    `~/Documents/Resolume Arena/Extra Effects`
@@ -51,5 +54,4 @@ Output artifact: `BR-PDF-READER-macOS-universal` → `BR_PDF_READER_FFGL.bundle`
 
 Requires macOS 11+ and Resolume 7.11+ for Apple Silicon (universal bundle).
 
-## Download
-Download: [Plugin Resolume PDF Reader macOS v1.0](https://github.com/wsmcreative99/BR-PDF-READER/releases/download/macOS/BR-PDF-READER-mac-port.zip)
+
