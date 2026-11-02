@@ -56,5 +56,9 @@ Requires macOS 11+ and Resolume 7.11+ for Apple Silicon (universal bundle).
 
 #### Bonus
 
-# NDI 4 Tools for Windows
+# NDI v4.6 Tools for Windows
 Download: [NDI 4 Tools.exe](https://downloads.ndi.tv/Tools/NDI%204%20Tools.exe)
+
+
+# NDI v4.6 Tools for macOS
+Download: [NDI 4 Tools.dmg](https://downloads.ndi.tv/Tools/NewTekNDIToolsForMacOS.dmg)
