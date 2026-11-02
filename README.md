@@ -54,7 +54,7 @@ Download: [Plugin Resolume PDF Reader macOS v1.0](https://github.com/wsmcreative
 
 Requires macOS 11+ and Resolume 7.11+ for Apple Silicon (universal bundle).
 
-#Bonus
+# Bonus
 
-##NDI Tools 4 for Windows
+## NDI Tools 4 for Windows
 Download: [NDI 4 Tools.exe](https://downloads.ndi.tv/Tools/NDI%204%20Tools.exe)
